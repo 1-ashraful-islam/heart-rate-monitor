@@ -5,22 +5,24 @@
 int main(int argc, char *argv[])
 {
   // read the video file from the argument
-  if (argc != 2)
+  if (argc != 3)
   {
-    fmt::print(stderr, "Required argument: <video_file>");
+    fmt::print(stderr, "Required argument: <working_directory> <video_file>\nExample: $PWD codingtest.mov");
     return -1;
   }
 
-  auto source = cv::VideoCapture(argv[1]);
+  auto sourceFile = fmt::format("{}/{}", argv[1], argv[2]);
+
+  auto source = cv::VideoCapture(sourceFile);
 
   if (!source.isOpened())
   {
-    fmt::print(stderr, "Error: VideoCapture failed to open source: {}", argv[1]);
+    fmt::print(stderr, "Error: VideoCapture failed to open source: {}", sourceFile);
     return -1;
   }
 
   // video writer paramters
-  auto videoOutFile = "/workspaces/CPP/src/workspace/heart-rate-monitor/processed_video.mp4";
+  auto videoOutFile = fmt::format("{}/processed_video.mp4", argv[1]);
   auto fps = 30;
   auto frameWidth = source.get(cv::CAP_PROP_FRAME_WIDTH);
   auto frameHeight = source.get(cv::CAP_PROP_FRAME_HEIGHT);
@@ -60,6 +62,7 @@ int main(int argc, char *argv[])
       break;
     }
     auto average = cv::mean(frame, mask);
+    green_t.push_back(average[1]);
 
     auto text = fmt::format("Red: {:.2f} Green: {:.2f} Blue: {:.2f} FPS: {:.2f}", average[2], average[1], average[0], tickMeter.getFPS());
     cv::rectangle(frame, top_left, bottom_right, fontColor, thickness, cv::LINE_8);
