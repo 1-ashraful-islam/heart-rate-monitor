@@ -10,3 +10,4 @@ This module sets up the dependencies
 ###############################################################################
 
 bazel_dep(name = "googletest", version = "1.14.0")
+bazel_dep(name = "fmt", version = "10.2.1")
