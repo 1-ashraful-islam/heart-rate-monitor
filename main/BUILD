@@ -8,3 +8,12 @@ cc_binary(
         "@opencv",
     ],
 )
+
+cc_binary(
+    name = "monitor-threaded",
+    srcs = ["multiThreaded.cc"],
+    deps = [
+        "@fmt",
+        "@opencv",
+    ],
+)
