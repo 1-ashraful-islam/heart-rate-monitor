@@ -55,30 +55,42 @@ int main(int argc, char *argv[])
 
   auto start_time = std::chrono::high_resolution_clock::now();
 
-  // read the video file from the argument
-  if (argc != 3)
+  // check the number of arguments
+  if (argc < 2)
   {
-    fmt::print(stderr, "Required argument: <working_directory> <video_file>\nExample: $PWD codingtest.mov");
+    fmt::print(stderr, "Usages: \n\
+    Produces heart rate from the video analysis. Please provide absolute path for files.\n\
+    Arguments:\n\
+    \t<video_file> - Required. Path to the input video file.\n\
+    \t[video_out_file] - Optional. Path for saving the processed output video.\n\
+    Examples:\n\
+    \t>> bazel run //main:monitor $PWD/codingtest.mov\n\
+    \t>> bazel run //main:monitor $PWD/codingtest.mov $PWD/processed_video.mp4\n");
     return -1;
   }
 
-  auto sourceFile = fmt::format("{}/{}", argv[1], argv[2]);
-
+  // open video capture from the video file
+  auto sourceFile = fmt::format("{}", argv[1]);
   auto source = cv::VideoCapture(sourceFile);
-
   if (!source.isOpened())
   {
     fmt::print(stderr, "Error: VideoCapture failed to open source: {}", sourceFile);
     return -1;
   }
 
-  // video writer paramters
-  auto videoOutFile = fmt::format("{}/processed_video.mp4", argv[1]);
+  // video paramters
   auto fps = 30;
   auto frameWidth = source.get(cv::CAP_PROP_FRAME_WIDTH);
   auto frameHeight = source.get(cv::CAP_PROP_FRAME_HEIGHT);
   cv::Size frameSize(frameWidth, frameHeight);
-  cv::VideoWriter videoOut(videoOutFile, cv::VideoWriter::fourcc('m', 'p', '4', 'v'), fps, frameSize);
+
+  // setup video writer
+  cv::VideoWriter videoOut;
+  if (argc > 2)
+  {
+    auto videoOutFile = fmt::format("{}", argv[2]);
+    videoOut = cv::VideoWriter(videoOutFile, cv::VideoWriter::fourcc('m', 'p', '4', 'v'), fps, frameSize);
+  }
 
   // ROI
   cv::Point top_left(345, 185);
@@ -112,21 +124,30 @@ int main(int argc, char *argv[])
       break;
     }
     count++;
+
+    // calculate the mean over the ROI
     auto average = cv::mean(frame, mask);
     green_t.push_back(average[1]);
 
-    if (static_cast<int>(green_t.size()) > window_size)
+    if (videoOut.isOpened())
     {
-      std::vector<double> windowed_signal(green_t.end() - window_size, green_t.end());
-      auto bpm = calculateBPM(windowed_signal, fps);
-      auto text = fmt::format("BPM: {}", bpm);
-      cv::putText(frame, text, top_left, fontFace, fontScale, fontColor, thickness, cv::LINE_AA);
-    }
+      // calculate bpm with rolling window and annotate
+      if (static_cast<int>(green_t.size()) > window_size)
+      {
+        std::vector<double> windowed_signal(green_t.end() - window_size, green_t.end());
+        auto bpm = calculateBPM(windowed_signal, fps);
+        auto text = fmt::format("BPM: {:.3f}", bpm);
+        cv::putText(frame, text, top_left, fontFace, fontScale, fontColor, thickness, cv::LINE_AA);
+      }
 
-    auto text = fmt::format("Red: {:.2f} Green: {:.2f} Blue: {:.2f} FPS: {:.2f}", average[2], average[1], average[0], tickMeter.getFPS());
-    cv::rectangle(frame, top_left, bottom_right, fontColor, thickness, cv::LINE_8);
-    cv::putText(frame, text, textOrigin, fontFace, fontScale, fontColor, thickness, cv::LINE_AA);
-    videoOut.write(frame);
+      // annotate the ROI and channel averages
+      auto text = fmt::format("Red: {:.2f} Green: {:.2f} Blue: {:.2f} FPS: {:.2f}", average[2], average[1], average[0], tickMeter.getFPS());
+      cv::rectangle(frame, top_left, bottom_right, fontColor, thickness, cv::LINE_8);
+      cv::putText(frame, text, textOrigin, fontFace, fontScale, fontColor, thickness, cv::LINE_AA);
+
+      // write the video frames
+      videoOut.write(frame);
+    }
     tickMeter.stop();
   }
 
