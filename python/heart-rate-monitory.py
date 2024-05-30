@@ -98,7 +98,7 @@ plt.xlabel("frequencies (Hz)")
 plt.ylabel("PSD")
 
 ## plot relevant portion of fft with annotation for bpm
-## From Jim bpm detected by Presage is 80-180bpm, 1.33 to 3 hz
+## From Jim W. bpm detected by Presage is 80-180bpm, 1.33 to 3 hz
 ## well trained athlete can have as low as 40bpm, 0.66 hz
 idx_to_clear =  ~((frequencies > 0.66) & (frequencies < 3))
 power[idx_to_clear] = 0

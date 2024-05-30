@@ -13,4 +13,6 @@ cd third_party/opencv
 
 ## Resources
 
-Install bazelisk: [bazelisk reference](https://docs.bazel.build/versions/5.4.1/install-bazelisk.html)
+1. Install bazelisk: [bazelisk reference](https://docs.bazel.build/versions/5.4.1/install-bazelisk.html)
+2. Formatting library: [fmt](https://github.com/fmtlib/fmt)
+3. Plotting library: [matplot++](https://github.com/alandefreitas/matplotplusplus)
