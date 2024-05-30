@@ -1,6 +1,7 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <fmt/format.h>
+#include <chrono>
 
 double calculateBPM(const std::vector<double> &signal, int fps)
 {
@@ -51,6 +52,9 @@ double calculateBPM(const std::vector<double> &signal, int fps)
 
 int main(int argc, char *argv[])
 {
+
+  auto start_time = std::chrono::high_resolution_clock::now();
+
   // read the video file from the argument
   if (argc != 3)
   {
@@ -102,13 +106,12 @@ int main(int argc, char *argv[])
   while (true)
   {
     tickMeter.start();
-    count++;
     source >> frame;
     if (frame.empty())
     {
-      fmt::print("No more frames available. Processed frame count: {}\n", count - 1);
       break;
     }
+    count++;
     auto average = cv::mean(frame, mask);
     green_t.push_back(average[1]);
 
@@ -129,7 +132,12 @@ int main(int argc, char *argv[])
 
   // perform the bpm calculation over entire clip
   auto bpm = calculateBPM(green_t, fps);
-  fmt::print("BPM: {}\n", bpm);
+  fmt::print("BPM: {:.3f}\n", bpm);
+
+  // performance stats
+  auto end_time = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> duration = end_time - start_time;
+  fmt::print("\n\nProcessed frame count: {}.\nExecution took: {:.3f} seconds\n", count, duration.count());
 
   return 0;
 }

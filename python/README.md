@@ -26,8 +26,16 @@ python3 heart-rate-monitory.py
 ## Result: 
 
 
-|ROI size| Result|
-|---|---|
-|![roi_small](result/roi_small.png)|![roi_small_analysis](result/roi_small_analysis.png)|
-|![roi_medium](result/roi_medium.png)|![roi_medium_analysis](result/roi_medium_analysis.png)|
-|![roi_large](result/roi_large.png)|![roi_large_analysis](result/roi_large_analysis.png)|
+## ROI Small
+
+![roi_small](result/roi_small.png)
+![roi_small_analysis](result/roi_small_analysis.png)
+
+## ROI Medium
+
+![roi_medium](result/roi_medium.png)
+![roi_medium_analysis](result/roi_medium_analysis.png)
+
+## ROI Large
+![roi_large](result/roi_large.png)
+![roi_large_analysis](result/roi_large_analysis.png)
