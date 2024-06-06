@@ -74,6 +74,10 @@ There are multiple improvements that can potentially make the measurement of hea
 
 See the *Python* implementation details and additional plots [here](python/README.md).
 
+## Debugging
+
+The repository contains the necessary `tasks.json` file and `launch.json` file to run and debug the program using vscode integrated debug panel. This solution makes it easy to debug bazel build programs using either `GDB` or `LLDB` and inspect/watch the variables as the program progresses. First, install the [`bazel vscode extension`](https://marketplace.visualstudio.com/items?itemName=BazelBuild.vscode-bazel), and also [`CodeLLDB extension`](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) if using `lldb` for debug. Then set the breakpoints on the source code and run the appropriate debug configuration from the debug panel.
+
 
 ## Resources
 
