@@ -1,4 +1,7 @@
 bazel-*
-codingtest.mov
 *.lock
 **/*.DS_Store
+
+**/*.mp4
+**/*.mov
+

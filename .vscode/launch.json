@@ -5,6 +5,27 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Debug Heart Rate Monitor with GDB",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/bazel-bin/main/monitor-threaded", // Adjust the path to your executable
+      "args": ["${cwd}/codingtest.mov"], // Any arguments the executable needs
+      "stopAtEntry": true,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "bazel: Build Debug //main:monitor-threaded", // Ensure this task builds your Bazel target
+      "miDebuggerPath": "/usr/bin/gdb" // Path to GDB on your system
+    },
+    {
       "name": "Debug Heart Rate Monitor with LLDB",
       "type": "lldb",
       "request": "launch",
