@@ -1,0 +1,24 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Heart Rate Monitor with LLDB",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/bazel-bin/main/monitor-threaded",
+      "args": ["${workspaceFolder}/codingtest.mov"],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "env": {},
+      "terminal": "integrated",
+      "initCommands": ["settings set target.x86-disassembly-flavor intel"],
+      "preLaunchTask": "bazel: Build Debug //main:monitor-threaded",
+      "sourceMap": {
+        "/proc/self/cwd/": "${workspaceFolder}/"
+      }
+    }
+  ]
+}

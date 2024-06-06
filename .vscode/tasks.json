@@ -5,12 +5,21 @@
   "tasks": [
     {
       "type": "bazel",
+      "command": "build",
+      "targets": ["//main:monitor-threaded"],
+      "options": ["--compilation_mode=dbg"],
+      "problemMatcher": [],
+      "label": "bazel: Build Debug //main:monitor-threaded",
+      "icon": { "color": "terminal.ansiCyan", "id": "wrench" }
+    },
+    {
+      "type": "bazel",
       "command": "run",
       "targets": ["//main:monitor-threaded"],
       "options": ["${workspaceFolder}/codingtest.mov"],
       "problemMatcher": [],
       "label": "bazel: Run //main:monitor-threaded",
-      "icon": { "color": "terminal.ansiCyan", "id": "eye-watch" }
+      "icon": { "color": "terminal.ansiCyan", "id": "heart" }
     },
     {
       "type": "bazel",
@@ -22,7 +31,7 @@
       ],
       "problemMatcher": [],
       "label": "bazel: Run //main:monitor-threaded (with video output)",
-      "icon": { "color": "terminal.ansiCyan", "id": "eye-watch" }
+      "icon": { "color": "terminal.ansiCyan", "id": "heart-filled" }
     },
     {
       "label": "Check for flakyness",
